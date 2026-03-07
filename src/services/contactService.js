@@ -34,13 +34,18 @@ const identifyContact = async ({ email, phoneNumber }) => {
 
   // 3. Collect all primary IDs from matching contacts
   const primaryIds = new Set();
+  // loop through all the contacts
   for (const contact of matchingContacts) {
+    // if `contact` is primary, add it to primaryIds
     if (contact.linkPrecedence === "primary") {
       primaryIds.add(contact.id);
     } else if (contact.linkedId) {
+      // else if `contact` have a linkedId, that's pointing to a `primaryId` add it
+      // as it's a set, we'll just have primaryIds
       primaryIds.add(contact.linkedId);
     }
   }
+  // remember, the above function can give 2 primaries, as it was shown in the test case.
 
   // 4. Fetch all primaries, oldest first
   const { rows: primaries } = await db.query(
@@ -50,10 +55,15 @@ const identifyContact = async ({ email, phoneNumber }) => {
     [Array.from(primaryIds)]
   );
 
+  // here's why we're setting the true primary
   const truePrimary = primaries[0];
 
   // 5. If multiple primaries, demote newer ones to secondary
   if (primaries.length > 1) {
+    // get all the Ids to demote
+    // record 1 {emailA, 123}
+    // record 2 {emailB, 234}
+    // record 3 {emailA, 234} // so at max it'll be only one id that's demoted
     const toDemoteIds = primaries.slice(1).map((p) => p.id);
 
     await db.query(
@@ -82,7 +92,7 @@ const identifyContact = async ({ email, phoneNumber }) => {
   // 7. Check if request contains new info not already in the cluster
   const allEmails = new Set(
     [truePrimary, ...allSecondaries].map((c) => c.email).filter(Boolean)
-  );
+  ); // get all the emails, ... is to unpack all secondaries and just add all truly elements
   const allPhones = new Set(
     [truePrimary, ...allSecondaries].map((c) => c.phoneNumber).filter(Boolean)
   );
@@ -103,6 +113,8 @@ const identifyContact = async ({ email, phoneNumber }) => {
   return buildResponse(truePrimary, allSecondaries);
 };
 
+
+// the function to build the final response
 const buildResponse = (primary, secondaries) => {
   const emails = [];
   const phoneNumbers = [];

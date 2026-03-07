@@ -30,14 +30,14 @@ const registerUser = async ({ username, password }) => {
   return rows[0];
 };
 
-const loginUser = async ({ username, password }) => {
+const loginUser = async ({ username, password, refreshToken }) => {
   const { rows } = await db.query(
     `SELECT * FROM "User" WHERE username = $1`,
     [username]
   );
 
   if (rows.length === 0) {
-    throw new Error("Invalid credentials");
+    throw new Error("User doesn't exist");
   }
 
   const user = rows[0];
@@ -45,6 +45,16 @@ const loginUser = async ({ username, password }) => {
 
   if (!passwordMatch) {
     throw new Error("Invalid credentials");
+  }
+
+  // If refreshToken flag is true, generate and save a new token
+  if (refreshToken) {
+    const newToken = generateToken();
+    await db.query(
+      `UPDATE "User" SET token = $1 WHERE id = $2`,
+      [newToken, user.id]
+    );
+    return { id: user.id, username: user.username, token: newToken };
   }
 
   return { id: user.id, username: user.username, token: user.token };
