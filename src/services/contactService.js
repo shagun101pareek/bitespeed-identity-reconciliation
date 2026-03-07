@@ -2,15 +2,26 @@ const db = require("../db");
 
 const identifyContact = async ({ email, phoneNumber }) => {
   // 1. Find all contacts matching either email or phoneNumber
+
+  // db query returns this :
+  // {
+  //   rows: [
+  //     { id: 1, email: "a@mail.com" },
+  //     { id: 2, email: "b@mail.com" }
+  //   ],
+  //   rowCount: 2,
+  //   command: "SELECT"
+  // }
+
   const { rows: matchingContacts } = await db.query(
     `SELECT * FROM "Contact" 
      WHERE "deletedAt" IS NULL 
      AND ("email" = $1 OR "phoneNumber" = $2)
      AND ($1 IS NOT NULL OR $2 IS NOT NULL)`,
     [email ?? null, phoneNumber ?? null]
-  );
+  ); // equivalent to result = db.query(); matchingContacts = result.rows
 
-  // 2. No matches → brand new customer
+  // 2. No matches, create brand new customer
   if (matchingContacts.length === 0) {
     const { rows } = await db.query(
       `INSERT INTO "Contact" ("email", "phoneNumber", "linkPrecedence", "createdAt", "updatedAt")
