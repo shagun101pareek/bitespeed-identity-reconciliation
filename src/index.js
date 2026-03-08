@@ -2,6 +2,9 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const identifyRouter = require("./routes/identify");
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./swagger");
+
 
 // initialize app first
 const app = express();
@@ -12,6 +15,7 @@ app.use(express.json());
 
 // API routes
 app.use("/", identifyRouter);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Serve visualizer static files
 app.use(express.static(path.join(__dirname, "../visualizer/dist")));

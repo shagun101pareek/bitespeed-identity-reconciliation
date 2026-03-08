@@ -34,7 +34,9 @@
     "jest": "^30.2.0",
     "nodemon": "^3.1.14",
     "pg": "^8.20.0",
-    "prisma": "^7.4.2"
+    "prisma": "^7.4.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "cross-env": "^10.1.0"
