@@ -1,6 +1,6 @@
-jest.mock("../db", () => require("./testDB"));
+jest.mock("../db", () => require("../db/testDb"));
 const { identifyContact } = require("../services/contactService");
-const db = require("./testDB");
+const db = require("../db/testDb");
 
 // Clear the Contact table before each test
 beforeEach(async () => {

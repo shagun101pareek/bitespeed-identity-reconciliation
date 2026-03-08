@@ -47,49 +47,6 @@ Links a customer's identity based on email and/or phone number.
 
 ---
 
-### `POST /register`
-Register a new user and get a `bst_` token.
-
-**Request:**
-```json
-{
-  "username": "doc",
-  "password": "flux123"
-}
-```
-
-**Response:**
-```json
-{
-  "message": "User registered successfully",
-  "token": "bst_a1b2c3"
-}
-```
-
----
-
-### `POST /login`
-Login and retrieve your token. Pass `refreshToken: true` to generate a new token.
-
-**Request:**
-```json
-{
-  "username": "doc",
-  "password": "flux123",
-  "refreshToken": false
-}
-```
-
-**Response:**
-```json
-{
-  "message": "Login successful",
-  "token": "bst_a1b2c3"
-}
-```
-
----
-
 ## 🔄 Identity Reconciliation Logic
 
 - Every contact is either **primary** or **secondary**
@@ -172,18 +129,13 @@ Tests cover:
 ```
 ├── src/
 │   ├── controllers/        # Request handlers
-│   │   ├── authController.js
 │   │   └── identifyController.js
 │   ├── db/                 # Database connection
 │   │   ├── index.js
 │   │   └── testDb.js
-│   ├── middleware/         # Auth middleware
-│   │   └── authenticate.js
 │   ├── routes/             # Express routes
-│   │   ├── auth.js
 │   │   └── identify.js
 │   ├── services/           # Business logic
-│   │   ├── authService.js
 │   │   └── contactService.js
 │   ├── tests/              # Jest tests
 │   │   └── identify.test.js
