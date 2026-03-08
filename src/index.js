@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const path = require("path");
 const identifyRouter = require("./routes/identify");
-const authRouter = require("./routes/auth");
 
 // initialize app first
 const app = express();
@@ -13,7 +12,6 @@ app.use(express.json());
 
 // API routes
 app.use("/", identifyRouter);
-app.use("/", authRouter);
 
 // Serve visualizer static files
 app.use(express.static(path.join(__dirname, "../visualizer/dist")));
