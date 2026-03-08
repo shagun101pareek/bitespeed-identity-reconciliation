@@ -7,7 +7,7 @@ const BG = "#0a0a0f";
 const CARD_BG = "#12121a";
 const BORDER = "#1e1e2e";
 
-const API = "http://localhost:3000";
+const API = import.meta.env.VITE_API_URL || "";
 
 function ContactNode({ contact, x, y, isNew }) {
   const isPrimary = contact.linkPrecedence === "primary";
