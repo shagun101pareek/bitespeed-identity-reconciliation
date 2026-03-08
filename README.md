@@ -86,8 +86,8 @@ Result — id=27 gets demoted, clusters merge under id=11:
 
 ```bash
 # 1. Clone the repo
-git clone https://github.com/<your-username>/identity-reconciliation
-cd identity-reconciliation
+git clone https://github.com/shagun101pareek/bitespeed-identity-reconciliation.git
+cd bitespeed-identity-reconciliation
 
 # 2. Install dependencies
 npm install
